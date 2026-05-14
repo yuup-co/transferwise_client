@@ -13,6 +13,10 @@ module TransferwiseClient
       nil
     end
 
+    def http_method
+      :post
+    end
+
     def to_h
       raise 'to_h not implemented.'
     end

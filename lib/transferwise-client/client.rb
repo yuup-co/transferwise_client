@@ -48,6 +48,20 @@ module TransferwiseClient
       ResponseFactory.new(transferwise_response).response
     end
 
+    def create_batch_group(batch_group_request)
+      return nil unless batch_group_request.valid?
+
+      transferwise_response = @http_request.send_post_request(batch_group_request)
+      ResponseFactory.new(transferwise_response).response
+    end
+
+    def complete_batch_group(complete_request)
+      return nil unless complete_request.valid?
+
+      transferwise_response = @http_request.send_patch_request(complete_request)
+      ResponseFactory.new(transferwise_response).response
+    end
+
     # GET requests
     def get_transfer(transfer_id)
       transferwise_response = @http_request.send_get_request("transfers/#{transfer_id}")

@@ -31,6 +31,17 @@ module TransferwiseClient
       http_get(url)
     end
 
+    def send_patch_request(request)
+      if request.api_version.present?
+        custom_endpoint = endpoint.gsub("v1", request.api_version)
+      else
+        custom_endpoint = endpoint
+      end
+
+      url = URI("#{custom_endpoint}/#{request.path}")
+      http_patch(url, request.to_h.to_json)
+    end
+
     def send_validation_request(validation_params)
       validation_params.map do |params|
         url = URI("#{validation_url}/#{params[:path]}")
@@ -66,6 +77,16 @@ module TransferwiseClient
       http_request = Net::HTTP::Get.new(url)
       http_request['Content-Type'] = 'application/json'
       http_request['Authorization'] = "Bearer #{@auth_key}" if @auth_key
+      http.request(http_request)
+    end
+
+    def http_patch(url, body)
+      http = Net::HTTP.new(url.host, url.port)
+      http.use_ssl = true
+      http_request = Net::HTTP::Patch.new(url)
+      http_request['Content-Type'] = 'application/json'
+      http_request['Authorization'] = "Bearer #{@auth_key}"
+      http_request.body = body
       http.request(http_request)
     end
 
