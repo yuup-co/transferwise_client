@@ -7,7 +7,7 @@ module TransferwiseClient
     end
 
     def api_version
-      "v3/profiles/#{TransferwiseClient.configuration.profile_id}"
+      "v3/profiles/#{profile_id}"
     end
 
     def path
@@ -21,6 +21,12 @@ module TransferwiseClient
         customerTransactionId: customer_transaction_id,
         details: details
       }
+    end
+
+    private
+
+    def profile_id
+      TransferwiseClient.configuration.profile_id
     end
   end
 end

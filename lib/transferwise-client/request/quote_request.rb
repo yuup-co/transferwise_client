@@ -1,12 +1,10 @@
 module TransferwiseClient
   # Quote request class
   class QuoteRequest < Request
-    attr_accessor :profile
     attr_accessor :source
     attr_accessor :target
     attr_accessor :target_amount
-    attr_accessor :type
-    attr_accessor :rate_type
+    attr_accessor :pay_out
 
     def valid?
       true
@@ -16,9 +14,23 @@ module TransferwiseClient
       'quotes'
     end
 
+    def api_version
+      "v3/profiles/#{profile_id}"
+    end
+
     def to_h
-      { profile: profile, source: source, target: target,
-        targetAmount: target_amount, type: type, rateType: rate_type }
+      {
+        sourceCurrency: source,
+        targetCurrency: target,
+        targetAmount: target_amount,
+        payOut: pay_out
+      }
+    end
+
+    private
+
+    def profile_id
+      TransferwiseClient.configuration.profile_id
     end
   end
 end
