@@ -15,7 +15,7 @@ module TransferwiseClient
     end
 
     def path
-      "batch-payments/#{batch_group_id}"
+      "batch-groups/#{batch_group_id}"
     end
 
     def to_h
