@@ -65,6 +65,12 @@ module TransferwiseClient
     def complete_batch_group(complete_request)
       return nil unless complete_request.valid?
 
+      if complete_request.version.nil?
+        # get the version immediately before completing
+        batch_group = get_batch_group(complete_request.batch_group_id)
+        complete_request.version = batch_group.version
+      end
+
       transferwise_response = @http_request.send_patch_request(complete_request)
       ResponseFactory.new(transferwise_response).response
     end
@@ -78,6 +84,12 @@ module TransferwiseClient
     def get_quote(quote_id)
       transferwise_response = @http_request.send_get_request("quotes/#{quote_id}")
       Quote.new(ResponseFactory.new(transferwise_response).response.to_h)
+    end
+
+    def get_batch_group(batch_id)
+      profile_id = TransferwiseClient.configuration.profile_id
+      transferwise_response = @http_request.send_get_request("profiles/#{profile_id}/batch-groups/#{batch_id}", api_version: "v3")
+      BatchGroup.new(ResponseFactory.new(transferwise_response).response.to_h)
     end
 
     def get_account_statement(borderless_account_id, currency,

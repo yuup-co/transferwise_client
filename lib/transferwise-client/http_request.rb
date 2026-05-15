@@ -26,8 +26,14 @@ module TransferwiseClient
 
     end
 
-    def send_get_request(path)
-      url = URI("#{endpoint}/#{path}")
+    def send_get_request(path, api_version: nil)
+      custom_endpoint = if api_version
+        endpoint.gsub("v1", api_version)
+      else
+        endpoint
+      end
+
+      url = URI("#{custom_endpoint}/#{path}")
       http_get(url)
     end
 
